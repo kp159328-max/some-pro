@@ -1,8 +1,11 @@
 from pathlib import Path
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-sports-key-789'
 DEBUG = True
-ALLOWED_HOSTS = []
+
+# YAHAN BADLAV HUA HAI: Render domain ko permission de di hai
+ALLOWED_HOSTS = ['://onrender.com', '127.0.0.1', 'localhost', '*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -14,8 +17,10 @@ INSTALLED_APPS = [
     'sports_app',
 ]
 
+# YAHAN BADLAV HUA HAI: Whitenoise joda hai taki styles online miss na ho
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', 
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
