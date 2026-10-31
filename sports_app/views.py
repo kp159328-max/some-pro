@@ -40,3 +40,8 @@ def delete_team(request, team_id):
     team = Team.objects.get(id=team_id)
     team.delete() # Isse is team ke saare players bhi automatically delete ho jayenge (CASCADE effect)
     return redirect('dashboard')
+from django.shortcuts import render
+
+def home(request):
+    return render(request, 'index.html')
+
