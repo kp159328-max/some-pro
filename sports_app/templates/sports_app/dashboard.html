@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports Arena Management</title>
+    <style>
+        :root {
+            --primary: #1e3c72;
+            --secondary: #2a5298;
+            --bg: #f4f6f9;
+            --card-bg: #ffffff;
+            --text: #333333;
+            --accent: #e74c3c;
+            --success: #2ecc71;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+            letter-spacing: 1px;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--secondary);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-card .title {
+            font-size: 14px;
+            color: #7f8c8d;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .stat-card .value {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--primary);
+            margin-top: 5px;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 900px) {
+            .main-grid { grid-template-columns: 1fr; }
+        }
+
+        .section-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .section-card h2 {
+            margin-top: 0;
+            color: var(--primary);
+            border-bottom: 2px solid #eaedf2;
+            padding-bottom: 10px;
+            font-size: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        input, select {
+            padding: 12px;
+            border: 1px solid #ccd1d9;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--secondary);
+            outline: none;
+            box-shadow: 0 0 8px rgba(42, 82, 152, 0.2);
+        }
+
+        button {
+            background-color: var(--secondary);
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        button:hover {
+            background-color: var(--primary);
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            background-color: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .badge {
+            background-color: #e0e7ff;
+            color: #4338ca;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .player-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .player-meta {
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .empty-text {
+            color: #94a3b8;
+            text-align: center;
+            font-style: italic;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🏆 Sports Arena Management Dashboard</h1>
+        <span style="font-weight: bold; background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 20px;">Live Server Active</span>
+    </header>
+
+    <div class="container">
+        
+        <!-- Summary Block -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="title">Total Active Teams</span>
+                <span class="value">{{ teams|length }}</span>
+            </div>
+            <div class="stat-card" style="border-left-color: var(--success);">
+                <span class="title">Registered Players</span>
+                <span class="value">{{ players|length }}</span>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            
+            <!-- Teams Section -->
+            <div class="section-card">
+                <h2>🛡️ Manage Club Teams</h2>
+                <form action="{% url 'add_team' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="text" name="name" placeholder="Enter Team Name (e.g., Real Madrid)" required>
+                    <input type="text" name="coach" placeholder="Head Coach Name" required>
+                    <button type="submit">➕ Register Team</button>
+                </form>
+
+                <ul>
+                    {% for team in teams %}
+                        <li>
+                            <div>
+                                <strong style="font-size: 16px; color: var(--primary);">{{ team.name }}</strong>
+                                <div style="font-size: 13px; color: #64748b; margin-top:2px;">Coach: {{ team.coach }}</div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span class="badge" style="background-color: #dcfce7; color: #15803d;">Active Club</span>
+                                <a href="{% url 'delete_team' team.id %}" style="color: #e74c3c; text-decoration: none; font-weight: bold; font-size: 18px;" title="Delete Team">❌</a>
+                            </div>
+                        </li>
+                    {% empty %}
+                        <p class="empty-text">No clubs or teams registered yet.</p>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Players Section -->
+            <div class="section-card">
+                <h2>👟 Roster & Player Registry</h2>
+                <form action="{% url 'add_player' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="text" name="name" placeholder="Player Full Name" required>
+                    <input type="number" name="age" placeholder="Age" min="15" max="50" required>
+                    <input type="text" name="position" placeholder="Position (e.g., Striker, Bowler)" required>
+                    
+                    <select name="team" required>
+                        <option value="" disabled selected>Assign to Club Team</option>
+                        {% for team in teams %}
+                            <option value="{{ team.id }}">{{ team.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" style="background-color: var(--success);">🏃‍♂️ Draft Player</button>
+                </form>
+
+                <ul>
+                    {% for player in players %}
+                        <li>
+                            <div class="player-info">
+                                <strong style="font-size: 16px;">{{ player.name }}</strong>
+                                <div class="player-meta">Age: {{ player.age }} | Role: <strong>{{ player.position }}</strong></div>
+                            </div>
+                            
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span class="badge">{{ player.team.name }}</span>
+                                <a href="{% url 'delete_player' player.id %}" style="color: #e74c3c; text-decoration: none; font-weight: bold; font-size: 18px;" title="Delete Player">❌</a>
+                            </div>
+                        </li>
+                    {% empty %}
+                        <p class="empty-text">No active players drafted into squads yet.</p>
+                    {% endfor %}
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
