@@ -11,4 +11,3 @@ urlpatterns = [
     path('delete-team/<int:team_id>/', views.delete_team, name='delete_team'),
 ]
 
-
